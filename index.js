@@ -1,30 +1,32 @@
 var slider = function (opt) {
     var $box = $(opt.box),
-        imgs = opt.imgs,
-        len = opt.imgs.length,
-        time = opt.time || 2000,
-        auto = opt.auto,
-        index = 0;
+        index = 0,
+        time = opt.time || 2500,
+        image = opt.imgs,
+        length = opt.imgs.length,
+        auto = opt.auto;
+   
     var $slider = $('<div class="slider" id="slider"></div>'),
         $leftBtn = $('<span id="left"><</span>'),
         $rightBtn = $('<span id="right">></span>'),
         $dot = $('<ul class="nav" id="navs"></ul>'),
         $li = [];
-    $slider.append($('<div class="slide"><img src="' + imgs[len - 1] + '" alt=""></div>'));
-    for (var i=0; i<len; i++) {
-        var $imgDiv = $('<div class="slide"><img src="' + imgs[i] + '" alt=""></div>');
-        $li[i] = $('<li>' + (i + 1) + '</li>');
+        $slider.append($('<div class="slide"><img src="' + image[length - 1] + '" alt=""></div>'));
+
+    for (var i=0; i<length; i++) {
+        var $imgDiv=$('<div class="slide"><img src="'+image[i]+'"alt=""></div>');
+        $li[i]=$('<li>'+(i+1)+'</li>');
         $slider.append($imgDiv);
         $dot.append($li[i]);
     }
-    
-    $slider.append($('<div class="slide"><img src="' + imgs[0] + '" alt=""></div>'));
-    $li[0].addClass("active");
-    function prev() {
+        $slider.append($('<div class="slide"><img src="'+image[0]+'"alt=""></div>'));
+        $li[0].addClass("active");
+
+    function prevent() {
         if (index == 0) {
-            changeli(len - 1);
+            changeli(length - 1);
             $slider.animate({ 'left': '+=' + 1200 }, 800, function () { $slider.css('left', -1200 * len); });
-            index = len - 1;
+            index = length - 1;
         } else {
             changeli(index - 1);
             $slider.animate({ 'left': '+=' + 1200 }, 800);
@@ -32,7 +34,7 @@ var slider = function (opt) {
         }
     }
     function next() {
-        if (index == len - 1) {
+        if (index == length - 1) {
             changeli(0);
             $slider.animate({ 'left': '-=' + 1200 }, 800, function () { $slider.css('left', -1200); });
             index = 0;
@@ -43,7 +45,7 @@ var slider = function (opt) {
         }
     }
     function changeli(num) {
-        for (var i=0; i<len; i++) {
+        for (var i=0; i<length; i++) {
             if ($li[i].hasClass("active")) {
                 $li[i].removeClass("active");
             }
@@ -67,18 +69,18 @@ var slider = function (opt) {
             timer = setInterval(next, time);
         }
     });
-    $leftBtn.click(prev);
+    $leftBtn.click(prevent);
     $rightBtn.click(next);
 
-    for (var i=0; i<len; i++) {
+    for (var i=0; i<length; i++) {
         (function(num){
             $li[num].click(function(){
                 changeli(num);
-                var dist=num-index;
-                if (dist>0) {
-                    $slider.animate({ 'left':'+='+(dist*-1200)},800);
-                } else if (dist<0) {
-                    $slider.animate({ 'left':'-='+(dist*1200)}, 800);
+                var distance=num-index;
+                if (distance>0) {
+                    $slider.animate({ 'left':'+='+(distance*-1200)},800);
+                } else if (distance<0) {
+                    $slider.animate({ 'left':'-='+(distance*1200)}, 800);
                 }
                 index = num;
             });
