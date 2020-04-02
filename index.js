@@ -22,29 +22,31 @@ var slider = function (opt) {
         $slider.append($('<div class="slide"><img src="'+image[0]+'"alt=""></div>'));
         $li[0].addClass("active");
 
-    function prevent() {
+    function left() {
         if (index == 0) {
-            changeli(length - 1);
+            change(length - 1);
             $slider.animate({ 'left': '+=' + 1200 }, 800, function () { $slider.css('left', -1200 * len); });
             index = length - 1;
         } else {
-            changeli(index - 1);
+            change(index - 1);
             $slider.animate({ 'left': '+=' + 1200 }, 800);
             index--;
         }
     }
-    function next() {
+
+    function right() {
         if (index == length - 1) {
-            changeli(0);
+            change(0);
             $slider.animate({ 'left': '-=' + 1200 }, 800, function () { $slider.css('left', -1200); });
             index = 0;
         } else {
-            changeli(index + 1);
+            change(index + 1);
             $slider.animate({ 'left': '-=' + 1200 }, 800);
             index++;
         }
     }
-    function changeli(num) {
+
+    function change(num) {
         for (var i=0; i<length; i++) {
             if ($li[i].hasClass("active")) {
                 $li[i].removeClass("active");
@@ -52,30 +54,34 @@ var slider = function (opt) {
         }
         $li[num].addClass("active");
     }
-    if (auto) {
-        var timer = setInterval(next, time);
-    }
 
+
+
+    if (auto) {
+        var timer = setInterval(right, time);
+    }
     $box.hover(function () {
-        $leftBtn.stop().animate({ 'opacity': 0.5 }, 'fast');
-        $rightBtn.stop().animate({ 'opacity': 0.5 }, 'fast');
+        $leftBtn.stop().animate({'opacity':0.5}, 'fast');
+        $rightBtn.stop().animate({'opacity':0.5}, 'fast');
         if (auto) {
             clearInterval(timer);
+            
         }           
     }, function () {
-        $leftBtn.stop().animate({ 'opacity': 0 }, 'fast');
-        $rightBtn.stop().animate({ 'opacity': 0 }, 'fast');
+        $leftBtn.stop().animate({'opacity':0}, 'fast');
+        $rightBtn.stop().animate({'opacity':0}, 'fast');
         if (auto) {
-            timer = setInterval(next, time);
-        }
+            timer = setInterval(right, time);  
+        }  
     });
-    $leftBtn.click(prevent);
-    $rightBtn.click(next);
+    $leftBtn.click(left);
+    $rightBtn.click(right);
+    
 
     for (var i=0; i<length; i++) {
         (function(num){
             $li[num].click(function(){
-                changeli(num);
+                change(num);
                 var distance=num-index;
                 if (distance>0) {
                     $slider.animate({ 'left':'+='+(distance*-1200)},800);
